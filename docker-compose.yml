@@ -1,0 +1,12 @@
+services:
+  xray:
+    image: yourname/xray-proxy:26.5.9
+    container_name: xray-proxy
+    restart: unless-stopped
+    ports:
+      - "10808:10808"
+      - "10809:10809"
+    volumes:
+      - ./config.json:/etc/xray/config.json:ro
+    environment:
+      - TZ=Asia/Shanghai

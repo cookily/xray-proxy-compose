@@ -1,0 +1,84 @@
+{
+  "log": {
+    "loglevel": "warning"
+  },
+  "inbounds": [
+    {
+      "tag": "http-in",
+      "port": 10808,
+      "listen": "0.0.0.0",
+      "protocol": "http",
+      "settings": {
+        "allowTransparent": false
+      }
+    },
+    {
+      "tag": "socks-in",
+      "port": 10809,
+      "listen": "0.0.0.0",
+      "protocol": "socks",
+      "settings": {
+        "auth": "noauth",
+        "udp": true
+      }
+    }
+  ],
+  "outbounds": [
+    {
+      "tag": "proxy",
+      "protocol": "vless",
+      "settings": {
+        "vnext": [
+          {
+            "address": "YOUR_SERVER_ADDRESS",
+            "port": 443,
+            "users": [
+              {
+                "id": "YOUR_UUID",
+                "encryption": "none",
+                "flow": "xtls-rprx-vision"
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "tcp",
+        "security": "reality",
+        "realitySettings": {
+          "show": false,
+          "serverName": "www.yahoo.com",
+          "fingerprint": "chrome",
+          "publicKey": "YOUR_PUBLIC_KEY",
+          "shortId": "YOUR_SHORT_ID",
+          "spiderX": ""
+        }
+      }
+    },
+    {
+      "tag": "direct",
+      "protocol": "freedom",
+      "settings": {}
+    }
+  ],
+  "routing": {
+    "domainStrategy": "AsIs",
+    "rules": [
+      {
+        "type": "field",
+        "ip": ["geoip:private"],
+        "outboundTag": "direct"
+      },
+      {
+        "type": "field",
+        "domain": ["geosite:cn"],
+        "outboundTag": "direct"
+      },
+      {
+        "type": "field",
+        "ip": ["geoip:cn"],
+        "outboundTag": "direct"
+      }
+    ]
+  }
+}
